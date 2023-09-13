@@ -42,20 +42,6 @@ public class JdbcSingleChar {
 			else {
 				System.out.print("Please provide character data.Operation Failed.");
 			}
-			/*
-			 * st.setString(1, sc.nextLine());
-			 * 
-			 * System.out.print("enter employee id:");
-			 * 
-			 * 
-			 * st.setInt(2, sc.nextInt());
-			 * 
-			 * System.out.print("enter department:");
-			 * 
-			 * 
-			 * st.setString(3, sc.next());
-			 */
-
 			if (y == 1 && flag == 1) {
 				ResultSet rt = st.executeQuery("select * from employee");
 				while (rt.next()) {
