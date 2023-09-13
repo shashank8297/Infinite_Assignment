@@ -1,0 +1,82 @@
+package com.infinite.jdbc;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Scanner;
+
+public class JdbcSingleChar {
+	static Connection con = null;
+	public static Connection getMyconnection(String name) {
+		if (name.equals("mysql")) {
+			try {
+				con = DriverManager.getConnection("jdbc:mysql://localhost:3306/training", "root", "mysql123@");
+			} 
+			catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return con;
+		}
+		return con;
+	}
+	public static void main(String args[]) {
+		try {
+			int flag = 0, y = 0;
+			Class.forName(args[0]);
+			con = getMyconnection(args[1]);
+			PreparedStatement st = con.prepareStatement("INSERT INTO employee VALUES(?,NULL,NULL)");
+			// dynamic
+			Scanner sc = new Scanner(System.in);
+			System.out.println("INSERTING:");
+			System.out.print("enter fullname:");
+			String s = sc.nextLine();
+			if (s.length() <= 1) {
+				st.setString(1, s);
+				y = st.executeUpdate();
+				flag = 1;
+			}
+			else {
+				System.out.print("Please provide character data.Operation Failed.");
+			}
+			/*
+			 * st.setString(1, sc.nextLine());
+			 * 
+			 * System.out.print("enter employee id:");
+			 * 
+			 * 
+			 * st.setInt(2, sc.nextInt());
+			 * 
+			 * System.out.print("enter department:");
+			 * 
+			 * 
+			 * st.setString(3, sc.next());
+			 */
+
+			if (y == 1 && flag == 1) {
+				ResultSet rt = st.executeQuery("select * from employee");
+				while (rt.next()) {
+					System.out.println(rt.getString(1) + " " + rt.getInt(2) + " " + rt.getString(3));
+				}
+			} else {
+				System.out.println("Record insertion failed");
+			}
+		} catch (SQLException e) {
+			System.out.println(e);
+		} catch (ClassNotFoundException e) {
+			System.out.println(e);
+		} catch (NullPointerException e) {
+			System.out.print(e);
+		} finally {
+			try {
+				con.close();
+				System.out.println("Connection closed");
+			} catch (Exception e) {
+				System.out.print(e);
+			}
+		}
+	}
+}
